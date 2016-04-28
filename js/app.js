@@ -22,9 +22,9 @@ document.getElementById("page-number").innerHTML = htmlButton;
 
 // Create Search Bar
 
-var searchInput = "<input placeholder='Search for students...'>";
-var searchButton = "<button>Search</button>";
-var searchField = "<div class = 'student-search'>" + searchInput + searchButton + "</div>";
+var searchInputHtml = "<input id='search-input' placeholder='Search for students...' value=''>";
+var searchButtonHtml = "<button>Search</button>";
+var searchField = "<div class = 'student-search'>" + searchInputHtml + searchButtonHtml + "</div>";
 
 $( "h2" ).after( searchField );
 
@@ -32,10 +32,9 @@ $( "h2" ).after( searchField );
 // create change page function
 // When button is clicked, show student-item accordingly
 var pageSelect;
-pageSelect = function(x) {
+pageSelect = function() {
   var activePageNumber = parseInt(this.innerHTML);
   var x = activePageNumber * 10;
-  var attClass =
   $(".student-item").hide();
   $(".student-item").slice(x-10,x).show();
 
@@ -47,10 +46,49 @@ pageSelect = function(x) {
   $(this).attr("class","active");
 }
 
+
+// Creating Search function
+var searchStudents;
+var searchInput;
+searchStudents = function() {
+  $(".student-item").hide();
+  // cycle through each element, and show it if there's is a match
+  for ( i = 0; i < studentNumber; i++ ) {
+    var name, email, info
+    name =  $(".student-item").eq(i).find("h3").html();
+    email = $(".student-item").eq(i).find("span").html();
+    info = name + " " + email;
+  //  console.log(name);
+   if (info.includes(searchInput)) {
+      $(".student-item").eq(i).show();
+   }
+  }
+};
+
+
+
+
 // Bind each button with a click event
 var i
 for (i = 0; i < document.getElementById("page-number").children.length; i++) {
   var paginationButton,
   paginationButton = document.getElementById("page-number").children[i].children[0];
   paginationButton.onclick = pageSelect;
-}
+};
+
+// Bind Type to create value
+$("#search-input").keyup(function() {
+  searchInput = $(this).val();
+});
+
+// Bind the search function with pressing enter;
+$("#search-input").keyup(function(e) {
+  if(e.keyCode == 13) {
+    searchStudents();
+  }
+});
+
+// bind search button with search event
+// var searchButton = document.getElementsByTagName("button")[0];
+var searchButton = $("button")[0];
+searchButton.onclick = searchStudents;
