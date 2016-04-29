@@ -36,15 +36,33 @@ searchStudents = function($students) {
   }
 
   makeButtons();
-//  bindButtons();
+  bindButtons();
 };
+
+var pageSelect;
+pageSelect = function() {
+  console.log("hi");
+
+    var activePageNumber = parseInt(this.innerHTML);
+    var x = activePageNumber * 10;
+    $(".student-item").hide();
+    $(".student-item").slice(x-10,x).show();
+
+    // take out the active class from the previous button
+    for (i = 0; i < $("#page-number li").length; i++) {
+      document.getElementById("page-number").children[i].children[0].setAttribute("class","");
+    }
+    // add active class to current button
+    $(this).attr("class","active");
+}
+
 
 //  Creating pagination buttons
 function makeButtons() {
-  var htmlButton = ""
+  var htmlButton = "";
   var i;
-  var listNumber = $(".student-item").length
-  var pageNumber = Math.floor(listNumber/10) + 1
+  var listNumber = $(".student-item").length;
+  var pageNumber = Math.floor(listNumber/10) + 1;
   for (i = 0; i < pageNumber; i++) {
     var n = i+1;
   htmlButton += "<li><a class='' href='#'>" + n + "</a></li>"
@@ -60,33 +78,26 @@ makeButtons();
 function bindButtons() {
   var i
   for (i = 0; i < $("#page-number li").length; i++) {
-    $("#page-number li")[i].click(function() {
-      pageSelect();
-    });
+  //  ???
+  //  $("#page-number li")[i].click(function() {
+  //    pageSelect();
+  //  });
+  var paginationButton;
+  paginationButton = document.getElementById("page-number").children[i].children[0];
+  paginationButton.onclick = pageSelect;
 
-    console.log($("#page-number li")[i]);
+  //  console.log($("#page-number li")[i]);
   };
 }
-
 bindButtons();
 
-// When button is clicked, show student-item accordingly
-var pageSelect;
-pageSelect = function() {
-  console.log("hi")
-//  var activePageNumber = 1;
-  var activePageNumber = parseInt(this.innerHTML);
-  var x = activePageNumber * 10;
-  $(".student-item").hide();
-  $(".student-item").slice(x-10,x).show();
 
-  // take out the active class from the previous button
-  for (i = 0; i < pageNumber; i++) {
-    document.getElementById("page-number").children[i].children[0].setAttribute("class","");
-  }
-  // add active class to current button
-  $(this).attr("class","active");
-}
+
+// When button is clicked, show student-item accordingly
+
+//  var activePageNumber = 1;
+
+
 
 
 
