@@ -1,9 +1,6 @@
 // Store Original html
-var originalHtml = $(".student-list");
 var students = $(".student-item");
-var displayHtml = "<ul class='student-list'>"
-var studentNumber = originalHtml.children().length;
-
+var studentNumber = students.length;
 
 // Create Search Bar
 var searchInputHtml = "<input id='search-input' placeholder='Search for students...' value=''>";
@@ -37,23 +34,35 @@ searchStudents = function($students) {
 
   makeButtons();
   bindButtons();
+  setActivePage(1);
 };
 
+
+// Creating pageSelect function
 var pageSelect;
 pageSelect = function() {
+  // 1. take activae page number
   console.log("hi");
+  var activePageNumber = parseInt(this.innerHTML);
+  // 2. display active page
+  // 3. set pagination class accordingly
+  setActivePage(activePageNumber);
+}
 
-    var activePageNumber = parseInt(this.innerHTML);
-    var x = activePageNumber * 10;
-    $(".student-item").hide();
-    $(".student-item").slice(x-10,x).show();
 
-    // take out the active class from the previous button
-    for (i = 0; i < $("#page-number li").length; i++) {
-      document.getElementById("page-number").children[i].children[0].setAttribute("class","");
-    }
-    // add active class to current button
-    $(this).attr("class","active");
+// Display active page
+function setActivePage(n) {
+  var x = n * 10;
+  $(".student-item").hide();
+  $(".student-item").slice(x-10,x).show();
+
+  // take out the active class from the previous button
+  for (i = 0; i < $("#page-number li").length; i++) {
+    document.getElementById("page-number").children[i].children[0].setAttribute("class","");
+  }
+  // add active class to current button
+  document.getElementById("page-number").children[n-1].children[0].setAttribute("class","active")
+
 }
 
 
@@ -69,9 +78,6 @@ function makeButtons() {
 };
 document.getElementById("page-number").innerHTML = htmlButton;
 }
-
-makeButtons();
-
 
 
 // Bind each button with a click event
@@ -89,16 +95,6 @@ function bindButtons() {
   //  console.log($("#page-number li")[i]);
   };
 }
-bindButtons();
-
-
-
-// When button is clicked, show student-item accordingly
-
-//  var activePageNumber = 1;
-
-
-
 
 
 // Bind Type to create value
@@ -116,33 +112,8 @@ $("#search-input").keyup(function(e) {
 $("#search-button").click(function() {
   searchStudents();
 })
-// var searchButton = $("button")[0];
-// searchButton.onclick = searchStudents;
 
 
-// divide filtered html by page
-
-
-/*
-// Show first 10 items
-$(".student-item").hide();
-$(".student-item:lt(9)").show();
-
-// Defining how many pages
-
-
-
-
-
-// create change page function
-
-
-
-
-
-
-
-
-
-
-*/
+makeButtons();
+bindButtons();
+setActivePage(1);
