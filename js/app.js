@@ -1,25 +1,35 @@
+// Store Original html
+// Display filtered html
+// divide filtered html by page
+
+
 // Show first 10 items
 $(".student-item").hide();
 $(".student-item:lt(9)").show();
 
-// Defining how many pages
 var studentNumber=$(".student-item").length;
-var pageNumber = Math.floor(studentNumber/10)+1
-var htmlButton = ""
+var pageNumber = Math.floor(studentNumber/10)+1;
+
+// Defining how many pages
+/*
+function getPageNumber() {
+  console.log(pageNumber);
+  return pageNumber
+};
+*/
 
 //  Creating pagination buttons
-function makeButton() {
+function makeButtons() {
+  var htmlButton = ""
   var i;
   for (i = 0; i < pageNumber; i++) {
     var n = i+1;
   htmlButton += "<li><a class='' href='#'>" + n + "</a></li>"
 };
-  return htmlButton;
+document.getElementById("page-number").innerHTML = htmlButton;
 }
 
-makeButton();
-document.getElementById("page-number").innerHTML = htmlButton;
-
+makeButtons();
 // Create Search Bar
 
 var searchInputHtml = "<input id='search-input' placeholder='Search for students...' value=''>";
@@ -59,22 +69,34 @@ searchStudents = function() {
     email = $(".student-item").eq(i).find("span").html();
     info = name + " " + email;
   //  console.log(name);
+    var listHtml;
    if (info.includes(searchInput)) {
       $(".student-item").eq(i).show();
+//    $(".student-list").append($(".student-item").eq(i)[0])
    }
+
   }
+  console.log(listHtml)
+  $(".student-list").html(listHtml);
+  makeButtons();
+  bindButtons();
 };
 
 
 
 
 // Bind each button with a click event
-var i
-for (i = 0; i < document.getElementById("page-number").children.length; i++) {
-  var paginationButton,
-  paginationButton = document.getElementById("page-number").children[i].children[0];
-  paginationButton.onclick = pageSelect;
-};
+function bindButtons() {
+  var i
+  for (i = 0; i < document.getElementById("page-number").children.length; i++) {
+    var paginationButton,
+    paginationButton = document.getElementById("page-number").children[i].children[0];
+    paginationButton.onclick = pageSelect;
+  };
+}
+
+bindButtons();
+
 
 // Bind Type to create value
 $("#search-input").keyup(function() {
