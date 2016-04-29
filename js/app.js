@@ -1,4 +1,5 @@
 // Store Original html
+var originalHtml = $(".student-list");
 // Display filtered html
 // divide filtered html by page
 
