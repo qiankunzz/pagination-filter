@@ -39,18 +39,6 @@ searchStudents = function($students) {
   setActivePageSearch();
 };
 
-
-// Creating pageSelect function
-var pageSelect;
-pageSelect = function() {
-  // 1. take activae page number
-  var activePageNumber = parseInt(this.innerHTML);
-  // 2. display active page
-  // 3. set pagination class accordingly
-  setActivePage(activePageNumber);
-}
-
-
 // Display active page
 function setActivePage(n) {
   var x = n * 10;
@@ -59,10 +47,10 @@ function setActivePage(n) {
   });
   // take out the active class from the previous button
   for (i = 0; i < $("#page-number li").length; i++) {
-    document.getElementById("page-number").children[i].children[0].setAttribute("class","");
+    $("#page-number li a").eq(i).attr("class","");
   }
   // add active class to current button
-  document.getElementById("page-number").children[n-1].children[0].setAttribute("class","active")
+  $("#page-number li a").eq(n-1).attr("class","active");
 }
 
 // don't show animation when dynamically search student
@@ -71,11 +59,12 @@ function setActivePageSearch() {
   $(".student-item").slice(0,10).show();
   // take out the active class from the previous button
   for (i = 0; i < $("#page-number li").length; i++) {
-    document.getElementById("page-number").children[i].children[0].setAttribute("class","");
+    $("#page-number li a").eq(i).attr("class","");
   }
   // add active class to current button
-  document.getElementById("page-number").children[0].children[0].setAttribute("class","active")
+  $("#page-number li a").eq(0).attr("class","active");
 }
+
 
 //  Creating pagination buttons
 function makeButtons() {
@@ -87,7 +76,7 @@ function makeButtons() {
     var n = i+1;
   htmlButton += "<li><a class=''>" + n + "</a></li>"
 };
-document.getElementById("page-number").innerHTML = htmlButton;
+$("#page-number").html(htmlButton);
 }
 
 
@@ -96,14 +85,10 @@ function bindButtons() {
   var i
   for (i = 0; i < $("#page-number li").length; i++) {
   //  ???
-//   $("#page-number li")[i].click(function() {
-//      pageSelect();
-//    });
-  var paginationButton;
-  paginationButton = document.getElementById("page-number").children[i].children[0];
-  paginationButton.onclick = pageSelect;
-
-  //  console.log($("#page-number li")[i]);
+ $("#page-number li a").eq(i).click(function() {
+      var activePageNumber = $(this).html();
+      setActivePage(activePageNumber);
+    });
   };
 }
 
