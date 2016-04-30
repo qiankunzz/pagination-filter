@@ -23,18 +23,20 @@ searchStudents = function($students) {
     name =  students.eq(i).find("h3").html();
     email = students.eq(i).find("span").html();
     info = name + " " + email;
-
     var list = students.eq(i)[0];
-
    if (info.includes(searchInput)) {
      // Render the page with displayHtml
      $(".student-list").append(list);
    }
   }
-
+  if ($(".student-item").length === 0) {
+    console.log("No Result Found")
+    var message = "<p>No result found, please search again</p>"
+    $(".student-list").append(message);
+  }
   makeButtons();
   bindButtons();
-  setActivePage(1);
+  setActivePageSearch();
 };
 
 
@@ -42,7 +44,6 @@ searchStudents = function($students) {
 var pageSelect;
 pageSelect = function() {
   // 1. take activae page number
-  console.log("hi");
   var activePageNumber = parseInt(this.innerHTML);
   // 2. display active page
   // 3. set pagination class accordingly
@@ -53,18 +54,28 @@ pageSelect = function() {
 // Display active page
 function setActivePage(n) {
   var x = n * 10;
-  $(".student-item").hide();
-  $(".student-item").slice(x-10,x).show();
-
+  $(".student-item:visible").fadeOut(400, function() {
+    $(".student-item").slice(x-10,x).fadeIn();
+  });
   // take out the active class from the previous button
   for (i = 0; i < $("#page-number li").length; i++) {
     document.getElementById("page-number").children[i].children[0].setAttribute("class","");
   }
   // add active class to current button
   document.getElementById("page-number").children[n-1].children[0].setAttribute("class","active")
-
 }
 
+// don't show animation when dynamically search student
+function setActivePageSearch() {
+  $(".student-item").hide();
+  $(".student-item").slice(0,10).show();
+  // take out the active class from the previous button
+  for (i = 0; i < $("#page-number li").length; i++) {
+    document.getElementById("page-number").children[i].children[0].setAttribute("class","");
+  }
+  // add active class to current button
+  document.getElementById("page-number").children[0].children[0].setAttribute("class","active")
+}
 
 //  Creating pagination buttons
 function makeButtons() {
@@ -74,7 +85,7 @@ function makeButtons() {
   var pageNumber = Math.floor(listNumber/10) + 1;
   for (i = 0; i < pageNumber; i++) {
     var n = i+1;
-  htmlButton += "<li><a class='' href='#'>" + n + "</a></li>"
+  htmlButton += "<li><a class=''>" + n + "</a></li>"
 };
 document.getElementById("page-number").innerHTML = htmlButton;
 }
@@ -85,9 +96,9 @@ function bindButtons() {
   var i
   for (i = 0; i < $("#page-number li").length; i++) {
   //  ???
-  //  $("#page-number li")[i].click(function() {
-  //    pageSelect();
-  //  });
+//   $("#page-number li")[i].click(function() {
+//      pageSelect();
+//    });
   var paginationButton;
   paginationButton = document.getElementById("page-number").children[i].children[0];
   paginationButton.onclick = pageSelect;
@@ -96,10 +107,11 @@ function bindButtons() {
   };
 }
 
-
 // Bind Type to create value
 $("#search-input").keyup(function() {
   searchInput = $(this).val();
+  //Extra Credit #2: dynamically filtering
+  searchStudents();
 });
 
 // Bind the search function with pressing enter;
@@ -116,4 +128,4 @@ $("#search-button").click(function() {
 
 makeButtons();
 bindButtons();
-setActivePage(1);
+setActivePageSearch();
